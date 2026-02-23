@@ -32,13 +32,40 @@ class ApiMiddleware implements MiddlewareInterface
 
     private function getRecords(string $table): array
     {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable($table);
+        $pool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $pool->getQueryBuilderForTable($table);
 
-        return $queryBuilder
+        $records = $queryBuilder
             ->select('*')
             ->from($table)
             ->executeQuery()
             ->fetchAllAssociative();
+
+        if ($table === 'tx_cinemaapi_domain_model_movie') {
+            foreach ($records as &$record) {
+                if (!empty($record['uid'])) {
+                    $refQb = $pool->getQueryBuilderForTable('sys_file_reference');
+                    $ref = $refQb->select('sys_file.identifier')
+                        ->from('sys_file_reference')
+                        ->join('sys_file_reference', 'sys_file', 'sys_file', 'sys_file_reference.uid_local = sys_file.uid')
+                        ->where(
+                        $refQb->expr()->eq('tablenames', $refQb->createNamedParameter('tx_cinemaapi_domain_model_movie')),
+                        $refQb->expr()->eq('fieldname', $refQb->createNamedParameter('image')),
+                        $refQb->expr()->eq('uid_foreign', $refQb->createNamedParameter($record['uid']))
+                    )
+                        ->executeQuery()
+                        ->fetchAssociative();
+
+                    if ($ref && !empty($ref['identifier'])) {
+                        $record['image'] = 'fileadmin' . $ref['identifier'];
+                    }
+                    else {
+                        $record['image'] = '';
+                    }
+                }
+            }
+        }
+
+        return $records;
     }
 }
