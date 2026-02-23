@@ -58,7 +58,7 @@ classDiagram
 
     Movie "1" <-- "n" Screening : contains
     Screening "1" <-- "n" Booking : scheduled for
-    Booking "1" *-- "1" Customer : belongs to
+    Booking "1" *-- "1" Customer : includes 
     Booking "1" ..> "n" Snack : includes optional
 ```
 
