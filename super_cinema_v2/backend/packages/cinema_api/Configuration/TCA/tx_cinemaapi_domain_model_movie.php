@@ -71,12 +71,11 @@ return [
             'image',
             [
                 'maxitems' => 1,
-                'foreign_match_fields' => [
-                    'fieldname' => 'image',
-                    'tablenames' => 'tx_cinemaapi_domain_model_movie',
-                    'table_local' => 'sys_file',
+                'appearance' => [
+                    'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
                 ],
-            ]
+            ],
+            $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
         ),
         ],
     ],

@@ -41,15 +41,15 @@ class ApiMiddleware implements MiddlewareInterface
             ->executeQuery()
             ->fetchAllAssociative();
 
-        if ($table === 'tx_cinemaapi_domain_model_movie') {
+        if (in_array($table, ['tx_cinemaapi_domain_model_movie', 'tx_cinemaapi_domain_model_snack'])) {
             foreach ($records as &$record) {
-                if (!empty($record['uid'])) {
+                if (!empty($record['uid']) && ($record['image'] ?? 0) > 0) {
                     $refQb = $pool->getQueryBuilderForTable('sys_file_reference');
                     $ref = $refQb->select('sys_file.identifier')
                         ->from('sys_file_reference')
                         ->join('sys_file_reference', 'sys_file', 'sys_file', 'sys_file_reference.uid_local = sys_file.uid')
                         ->where(
-                        $refQb->expr()->eq('tablenames', $refQb->createNamedParameter('tx_cinemaapi_domain_model_movie')),
+                        $refQb->expr()->eq('tablenames', $refQb->createNamedParameter($table)),
                         $refQb->expr()->eq('fieldname', $refQb->createNamedParameter('image')),
                         $refQb->expr()->eq('uid_foreign', $refQb->createNamedParameter($record['uid']))
                     )
@@ -62,6 +62,9 @@ class ApiMiddleware implements MiddlewareInterface
                     else {
                         $record['image'] = '';
                     }
+                }
+                else {
+                    $record['image'] = '';
                 }
             }
         }
