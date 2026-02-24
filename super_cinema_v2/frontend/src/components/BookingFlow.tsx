@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Movie, Screening, Snack } from "@/lib/api";
+import { calculateTotalPrice } from "@/lib/priceCalculator";
 import { Armchair, Popcorn, CreditCard, CheckCircle2, ChevronRight, ChevronLeft } from "lucide-react";
 
 export default function BookingFlow({ screening, movie, snacks }: { screening: Screening, movie: Movie, snacks: Snack[] }) {
@@ -95,8 +96,8 @@ export default function BookingFlow({ screening, movie, snacks }: { screening: S
                                     key={id} disabled={isOccupied}
                                     onClick={() => toggleSeat(id)}
                                     className={`aspect-square rounded-t-lg rounded-b-sm flex items-center justify-center text-xs font-bold transition-all ${isOccupied ? "bg-white/5 text-transparent cursor-not-allowed" :
-                                            isSelected ? "bg-brand-500 text-white shadow-[0_0_15px_rgba(229,9,20,0.5)] scale-110" :
-                                                "bg-white/20 text-white/50 hover:bg-white/30 hover:text-white"
+                                        isSelected ? "bg-brand-500 text-white shadow-[0_0_15px_rgba(229,9,20,0.5)] scale-110" :
+                                            "bg-white/20 text-white/50 hover:bg-white/30 hover:text-white"
                                         }`}
                                 >
                                     {id}
@@ -203,14 +204,7 @@ export default function BookingFlow({ screening, movie, snacks }: { screening: S
                             <div className="border-t border-white/10 mt-6 pt-4 flex justify-between font-bold text-xl text-brand-500">
                                 <span>Total</span>
                                 <span className="font-mono">
-                                    ${(
-                                        (selectedSeats.length * 15) +
-                                        Object.keys(selectedSnacks).reduce((acc, id) => {
-                                            const qty = selectedSnacks[parseInt(id)];
-                                            const snack = snacks.find(s => s.uid === parseInt(id));
-                                            return acc + (snack ? snack.price * qty : 0);
-                                        }, 0)
-                                    ).toFixed(2)}
+                                    ${calculateTotalPrice(selectedSeats.length, 15, selectedSnacks, snacks).toFixed(2)}
                                 </span>
                             </div>
                         </div>

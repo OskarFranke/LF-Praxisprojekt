@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Film } from "lucide-react";
 import Link from "next/link";
+import AuthButton from "@/components/AuthButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,9 +25,12 @@ export default function RootLayout({
             <Film className="w-8 h-8 text-brand-500" />
             <span className="text-xl font-bold tracking-tight text-gradient">Super Cinema</span>
           </Link>
-          <div className="flex gap-6 text-sm font-medium text-gray-300">
-            <Link href="/" className="hover:text-white transition">Movies</Link>
-            <Link href="/snacks" className="hover:text-white transition">Snacks</Link>
+          <div className="flex items-center gap-8 text-sm font-medium text-gray-300">
+            <div className="flex gap-6">
+              <Link href="/" className="hover:text-white transition">Movies</Link>
+              <Link href="/snacks" className="hover:text-white transition">Snacks</Link>
+            </div>
+            <AuthButton />
           </div>
         </nav>
         <main className="flex-1 flex flex-col">{children}</main>
