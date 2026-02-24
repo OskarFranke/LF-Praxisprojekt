@@ -39,7 +39,10 @@ export default async function MovieDetail({ params }: { params: Promise<{ id: st
                     </div>
 
                     <h1 className="text-5xl font-extrabold tracking-tight mb-6">{movie.title}</h1>
-                    <p className="text-xl text-gray-300 leading-relaxed mb-10">{movie.description}</p>
+                    <div
+                        className="text-xl text-gray-300 leading-relaxed mb-10"
+                        dangerouslySetInnerHTML={{ __html: movie.description }}
+                    />
 
                     <div className="glass-panel rounded-2xl p-8 border border-white/5">
                         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">

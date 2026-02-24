@@ -65,21 +65,8 @@ return [
                 'default' => 0.00
             ]
         ],
-        'image' => [
-            'exclude' => false,
-            'label' => 'Snack Image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-            'image',
-            [
-                'maxitems' => 1,
-                'appearance' => [
-                    'createNewRelationLinkTitle' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:images.addFileReference'
-                ],
-            ]
-        ),
-        ],
     ],
     'types' => [
-        '1' => ['showitem' => 'hidden, title, category, price, description, image'],
+        '1' => ['showitem' => 'hidden, title, category, price, description'],
     ],
 ];
